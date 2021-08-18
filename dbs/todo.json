@@ -1,0 +1,6 @@
+[
+  { "id": "18fa3e56-0192-47f4-b359-8bdd3f8e580e", "name": "Shopping", "status": false },
+  { "id": "2f2dd869-116f-4173-97ed-6e40c1ebb8f5", "name": "Meeting", "status": false },
+  { "id": "30b1d511-8ac3-4764-9abf-4070092de818", "name": "Family time", "status": true },
+  { "id": "26222f23-86bb-4562-930a-605c4eb18dce", "name": "Doctor appointment", "status": true }
+]
