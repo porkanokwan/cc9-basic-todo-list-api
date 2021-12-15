@@ -24,7 +24,8 @@ exports.getTodo = async (req, res, next) => {
     const { id } = req.params;
     const todos = await findTodos();
     const todo = todos.find(todo => todo.id === id);
-    if (!todo) return res.status(400).json({ message: 'todo with this id not found' });
+    if (!todo)
+      return res.status(400).json({ message: 'todo with this id not found' });
     res.status(200).json({ todo });
   } catch (err) {
     next(err);
@@ -33,14 +34,17 @@ exports.getTodo = async (req, res, next) => {
 
 exports.createTodo = async (req, res, next) => {
   try {
-    const { name, status } = req.body;
+    const { title, completed } = req.body;
 
-    if (!name || !name.trim()) return res.status(400).json({ message: 'name is required' });
-    if (typeof status !== 'boolean')
-      return res.status(400).json({ message: 'status is required and must be a boolean' });
+    if (!title || !title.trim())
+      return res.status(400).json({ message: 'title is required' });
+    if (typeof completed !== 'boolean')
+      return res
+        .status(400)
+        .json({ message: 'completed is required and must be a boolean' });
 
     const todos = await findTodos();
-    const todo = { id: uuidv4(), name, status: !!status };
+    const todo = { id: uuidv4(), title, completed: !!completed };
     todos.unshift(todo);
     await saveTodos(todos);
     res.status(201).json({ todo });
@@ -52,19 +56,23 @@ exports.createTodo = async (req, res, next) => {
 exports.updateTodo = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { name, status } = req.body;
+    const { title, completed } = req.body;
 
-    if (!name || !name.trim()) return res.status(400).json({ message: 'name is required' });
-    if (typeof status !== 'boolean')
-      return res.status(400).json({ message: 'status is required and must be a boolean' });
+    if (!title || !title.trim())
+      return res.status(400).json({ message: 'title is required' });
+    if (typeof completed !== 'boolean')
+      return res
+        .status(400)
+        .json({ message: 'completed is required and must be a boolean' });
 
     const todos = await findTodos();
     const foundIdx = todos.findIndex(todo => todo.id === id);
-    if (foundIdx === -1) return res.status(400).json({ message: 'todo with this id not found' });
-    const todo = { ...todos[foundIdx], name, status };
+    if (foundIdx === -1)
+      return res.status(400).json({ message: 'todo with this id not found' });
+    const todo = { ...todos[foundIdx], title, completed };
     todos[foundIdx] = todo;
     await saveTodos(todos);
-    res.status(200).json();
+    res.status(200).json({ todo });
   } catch (err) {
     next(err);
   }
@@ -75,7 +83,8 @@ exports.deleteTodo = async (req, res, next) => {
     const { id } = req.params;
     const todos = await findTodos();
     const foundIdx = todos.findIndex(todo => todo.id === id);
-    if (foundIdx === -1) return res.status(400).json({ message: 'todo with this id not found' });
+    if (foundIdx === -1)
+      return res.status(400).json({ message: 'todo with this id not found' });
     todos.splice(foundIdx, 1);
     await saveTodos(todos);
     res.status(204).json();
